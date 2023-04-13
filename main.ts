@@ -7,6 +7,7 @@ input.onButtonPressed(Button.A, function () {
     basic.showArrow(ArrowNames.North)
 })
 input.onSound(DetectedSound.Loud, function () {
+    music.playMelody("C - - - - - - - ", 120)
     wuKong.stopAllMotor()
     basic.showLeds(`
         . # # # .
@@ -42,14 +43,22 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     wuKong.setAllMotor(50, -25)
     basic.showArrow(ArrowNames.East)
 })
+let Chips = 3
 // balls
 basic.forever(function () {
-    if (sonarbit.sonarbit_distance(Distance_Unit.Distance_Unit_mm, DigitalPin.P0) <= 8) {
-        basic.showIcon(IconNames.Yes)
-        music.playTone(262, music.beat(BeatFraction.Whole))
-        wuKong.setServoAngle(wuKong.ServoTypeList._360, wuKong.ServoList.S0, 276)
-        basic.pause(5000)
-        wuKong.setServoAngle(wuKong.ServoTypeList._360, wuKong.ServoList.S0, 0)
+    if (Chips >= 1) {
+        if (sonarbit.sonarbit_distance(Distance_Unit.Distance_Unit_mm, DigitalPin.P0) <= 8) {
+            basic.showIcon(IconNames.Yes)
+            music.playTone(262, music.beat(BeatFraction.Whole))
+            wuKong.setServoAngle(wuKong.ServoTypeList._360, wuKong.ServoList.S0, 276)
+            basic.pause(5000)
+            wuKong.setServoAngle(wuKong.ServoTypeList._360, wuKong.ServoList.S0, 0)
+            Chips += -1
+        } else if (sonarbit.sonarbit_distance(Distance_Unit.Distance_Unit_mm, DigitalPin.P0) > 8) {
+            basic.showIcon(IconNames.No)
+            wuKong.setServoAngle(wuKong.ServoTypeList._360, wuKong.ServoList.S0, 0)
+            basic.pause(500)
+        }
     } else if (sonarbit.sonarbit_distance(Distance_Unit.Distance_Unit_mm, DigitalPin.P0) > 8) {
         basic.showIcon(IconNames.No)
         wuKong.setServoAngle(wuKong.ServoTypeList._360, wuKong.ServoList.S0, 0)
